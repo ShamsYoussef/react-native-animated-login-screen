@@ -1,1 +1,0 @@
-# animated-login-screen-react-native
