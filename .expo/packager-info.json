@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 24876,
+  "expoServerNgrokUrl": "https://2h-saf.anonymous.animated-login-screen.exp.direct",
+  "packagerNgrokUrl": "https://packager.2h-saf.anonymous.animated-login-screen.exp.direct",
+  "ngrokPid": 24912
 }
