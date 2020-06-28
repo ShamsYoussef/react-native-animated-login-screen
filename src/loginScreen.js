@@ -1,44 +1,35 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
-
+import { StyleSheet, Text, View, TextInput, Dimensions, Image } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
-import { TapGestureHandler, State } from 'react-native-gesture-handler'
+import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import { Icon } from 'react-native-elements'
 
 const { width, height } = Dimensions.get('window');
+
 const { Value, block, cond, set, Clock, stopClock, startClock, clockRunning, timing, debug, interpolate, Extrapolate } = Animated
 const loginScreen = () => {
 
     const [buttonOpacity, setButtonOpacity] = useState(new Value(1));
+
     const onStateChange = e => {
         if (e.nativeEvent.state === State.END) {
             setButtonOpacity(runTiming(new Clock(), 1, 0));
-
         }
     };
 
-    const ButtonY = interpolate(buttonOpacity, {
-        inputRange: [0, 1],
-        outputRange: [100, 0],
-        extrapolate: Extrapolate.CLAMP
-    })
+    const transform = (f, t) => {
+        return interpolate(buttonOpacity, {
+            inputRange: [0, 1],
+            outputRange: [f, t],
+            extrapolate: Extrapolate.CLAMP
+        })
+    }
 
-    const backgroundY = interpolate(buttonOpacity, {
-        inputRange: [0, 1],
-        outputRange: [-height / 3, 0],
-        extrapolate: Extrapolate.CLAMP
-    })
-
-    const imageY = interpolate(buttonOpacity, {
-        inputRange: [0, 1],
-        outputRange: [height / 4.5, 0],
-        extrapolate: Extrapolate.CLAMP
-    })
-
-    const textY = interpolate(buttonOpacity, {
-        inputRange: [0, 1],
-        outputRange: [-200, 0],
-        extrapolate: Extrapolate.CLAMP
-    })
+    const onCloseState = e => {
+        if (e.nativeEvent.state === State.END) {
+            setButtonOpacity(runTiming(new Clock(), 0, 1));
+        }
+    };
 
     const runTiming = (clock, value, distance) => {
         const state = {
@@ -49,7 +40,7 @@ const loginScreen = () => {
         };
 
         const config = {
-            duration: 1000,
+            duration: 500,
             toValue: new Value(0),
             easing: Easing.inOut(Easing.ease),
         };
@@ -69,30 +60,50 @@ const loginScreen = () => {
             state.position,
 
         ]);
-
-
     }
-
+    
     return (
         <View style={styles.container}>
 
-            <Animated.View style={{ ...StyleSheet.absoluteFill, transform: [{ translateY: backgroundY }], backgroundColor: '#b7d1d2' }}>
-                <Animated.Image resizeMode="contain" style={{ ...styles.image, transform: [{ translateY: imageY }], }} source={require('../assets/images/46.jpg')} />
+            <Animated.View style={{ ...StyleSheet.absoluteFill, transform: [{ translateY: transform(-height / 3, 0) }], backgroundColor: '#b7d1d2' }}>
+                <Animated.Image resizeMode="contain" style={{ ...styles.image, transform: [{ translateY: transform(height / 4.5, 0) }], }} source={require('../assets/images/46.jpg')} />
             </Animated.View>
-            <Animated.View style={{ ...{ justifyContent: "center", alignItems: "center", width: width, position: "absolute", top: 80 }, transform: [{ translateY: textY }], opacity: buttonOpacity }}>
+            <Animated.View style={{ ...styles.textContainer, transform: [{ translateY: transform(-200, 0) }], opacity: buttonOpacity }}>
                 <Text style={{ ...styles.textStyle, fontSize: width / 18, color: '#2e808b' }}>Stay Safe..</Text>
 
                 <Text style={{ ...styles.textStyle, fontSize: width / 15 }}>Work From Home</Text>
             </Animated.View>
             <View style={styles.buttonContainer}>
-                <Animated.View style={{ ...styles.button, backgroundColor: '#f7b640', opacity: buttonOpacity, transform: [{ translateY: ButtonY }] }}>
+                <Animated.View style={{ ...styles.button, backgroundColor: '#f7b640', opacity: buttonOpacity, transform: [{ translateY: transform(100, 1) }] }}>
                     <Text style={styles.buttonText} >SIGN UP</Text>
                 </Animated.View>
                 <TapGestureHandler onHandlerStateChange={onStateChange}>
-                    <Animated.View style={{ ...styles.button, opacity: buttonOpacity, transform: [{ translateY: ButtonY }] }}>
+                    <Animated.View style={{ ...styles.button, opacity: buttonOpacity, transform: [{ translateY: transform(100, 1) }] }}>
                         <Text style={styles.buttonText}>LOGIN</Text>
                     </Animated.View>
                 </TapGestureHandler>
+                <Animated.View style={{
+                    ...styles.loginContainer,
+                    ...StyleSheet.absoluteFill,
+                    zIndex: transform(1, -1),
+                    opacity: transform(1, 0),
+                    transform: [{ translateY: transform(0, 100) }]
+                }}>
+                    <TapGestureHandler onHandlerStateChange={onCloseState}>
+                        <Animated.View style={{ ...styles.downArrowContainer, transform: [{ rotate: transform(0, 2) }] }}>
+                            <Image style={styles.downArrow} source={require('../assets/images/13.png')} />
+                        </Animated.View>
+                    </TapGestureHandler>
+
+                    <TextInput style={styles.inputText} placeholderTextColor="gray" placeholder="Username" />
+                    <TextInput style={styles.inputText} placeholderTextColor="gray" placeholder="Password" />
+                    <View style={{ ...styles.button, backgroundColor: '#4e8896', shadowOffset: { width: 2, height: 2 }, shadowColor: '#000', shadowOpacity: .2, elevation: 3 }}>
+                        <Text style={{ fontWeight: 'bold', color: '#FFF' }}>
+                            LOGIN
+                        </Text>
+                    </View>
+
+                </Animated.View>
 
             </View>
         </View>
@@ -117,6 +128,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         justifyContent: "center",
         height: height / 3,
+        zIndex: 0
     },
     button: {
         backgroundColor: '#FFF',
@@ -135,5 +147,48 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontFamily: 'sans-serif-medium',
         fontWeight: 'bold'
+    },
+    textContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        width: width,
+        position: "absolute",
+        top: 80
+    },
+    loginContainer: {
+        height: height / 3,
+        // backgroundColor: '#FFF',
+        top: null,
+        justifyContent: "center",
+    },
+    inputText: {
+        height: 50,
+        borderRadius: 30,
+        borderColor: '#2f818c',
+        borderWidth: .5,
+        marginHorizontal: 30,
+        marginVertical: 5,
+        paddingLeft: 10,
+        zIndex: 1
+    },
+    downArrow: {
+        height: 30,
+        width: 30,
     }
+    , downArrowContainer: {
+        backgroundColor: '#FFF',
+        borderRadius: 50,
+        position: "absolute",
+        top: -15,
+        left: width / 2 - 20,
+        padding: 3,
+        shadowOffset: { width: 2, height: 2 },
+        shadowColor: '#000',
+        shadowOpacity: .2,
+        elevation: 3,
+        justifyContent: "center",
+        alignItems: "center"
+    }
+
+
 })

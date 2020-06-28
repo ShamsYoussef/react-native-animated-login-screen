@@ -8,7 +8,7 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
 
   const cacheResourcesAsync = async () => {
-    const images = [require('./assets/images/2.jpg')];
+    const images = [require('./assets/images/46.jpg')];
 
     const cacheImages = images.map(image => {
       return Asset.fromModule(image).downloadAsync();
