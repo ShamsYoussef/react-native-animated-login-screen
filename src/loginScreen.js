@@ -2,18 +2,33 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Dimensions, Image } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
-import { Icon } from 'react-native-elements'
-
 const { width, height } = Dimensions.get('window');
 
-const { Value, block, cond, set, Clock, stopClock, startClock, clockRunning, timing, debug, interpolate, Extrapolate } = Animated
+const { Value,
+    block,
+    cond,
+    set,
+    Clock,
+    stopClock,
+    startClock,
+    clockRunning,
+    timing,
+    debug,
+    interpolate,
+    Extrapolate
+} = Animated;
 const loginScreen = () => {
-
     const [buttonOpacity, setButtonOpacity] = useState(new Value(1));
 
     const onStateChange = e => {
         if (e.nativeEvent.state === State.END) {
-            setButtonOpacity(runTiming(new Clock(), 1, 0));
+            setButtonOpacity(setTiming(new Clock(), 1, 0));
+        }
+    };
+
+    const onCloseState = e => {
+        if (e.nativeEvent.state === State.END) {
+            setButtonOpacity(setTiming(new Clock(), 0, 1));
         }
     };
 
@@ -25,13 +40,7 @@ const loginScreen = () => {
         })
     }
 
-    const onCloseState = e => {
-        if (e.nativeEvent.state === State.END) {
-            setButtonOpacity(runTiming(new Clock(), 0, 1));
-        }
-    };
-
-    const runTiming = (clock, value, distance) => {
+    const setTiming = (clock, value, distance) => {
         const state = {
             finished: new Value(0),
             position: new Value(0),
@@ -61,12 +70,12 @@ const loginScreen = () => {
 
         ]);
     }
-    
+
     return (
         <View style={styles.container}>
 
-            <Animated.View style={{ ...StyleSheet.absoluteFill, transform: [{ translateY: transform(-height / 3, 0) }], backgroundColor: '#b7d1d2' }}>
-                <Animated.Image resizeMode="contain" style={{ ...styles.image, transform: [{ translateY: transform(height / 4.5, 0) }], }} source={require('../assets/images/46.jpg')} />
+            <Animated.View style={{ ...StyleSheet.absoluteFill, transform: [{ translateY: transform(-height / 3, 0) }], backgroundColor: '#b7d1d2', }}>
+                <Animated.Image resizeMode="contain" style={{ ...styles.image, transform: [{ translateY: transform(height / 4.5, 0) }] }} source={require('../assets/images/46.jpg')} />
             </Animated.View>
             <Animated.View style={{ ...styles.textContainer, transform: [{ translateY: transform(-200, 0) }], opacity: buttonOpacity }}>
                 <Text style={{ ...styles.textStyle, fontSize: width / 18, color: '#2e808b' }}>Stay Safe..</Text>
@@ -120,10 +129,10 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        width: null,
-        height: null,
         bottom: 50,
-        borderRadius: 100
+        height: null,
+        width: null,
+        borderRadius: 100,
     },
     buttonContainer: {
         justifyContent: "center",
