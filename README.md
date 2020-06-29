@@ -27,6 +27,8 @@ Simple demo of animated login screen by using react-native-gesture-handler and r
 ## Project setup
 
 ```
-npm install
-expo start
+$ git clone https://github.com/ShamsYoussef/react-native-animated-login-screen.git
+$ cd /react-native-animated-login-screen
+$ npm install
+$ expo start
 ```
