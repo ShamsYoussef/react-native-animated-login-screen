@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-Simple demo of animated login screen by using `react-native-gesture-handler` and `react-native-reanimated`
+Simple demo of animated login screen by using react-native-gesture-handler and react-native-reanimated
 </p>
 
 <h2 align="center">
