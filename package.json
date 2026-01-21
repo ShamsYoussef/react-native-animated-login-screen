@@ -10,7 +10,7 @@
   "dependencies": {
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo/vector-icons": "^10.2.0",
-    "expo": "^37.0.0",
+    "expo": "^48.0.0",
     "expo-asset": "^8.1.7",
     "expo-cli": "^3.21.9",
     "expo-font": "^8.2.1",
